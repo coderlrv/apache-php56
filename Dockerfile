@@ -1,9 +1,4 @@
 FROM alpine:3.8
-LABEL Description="Simple apache with php 5.6 image using alpine Linux for Web Apps"
-
-# Install gnu-libconv required by php5-iconv
-# RUN apk add gnu-libiconv
-# ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so
 
 WORKDIR /app
 
@@ -22,12 +17,20 @@ RUN apk --update add bash apache2 php5-apache2 curl \
     php5-gd \
     php5-xml \
     php5-dom \
+    php5-gettext \
     # php5-iconv \
     && rm -f /var/cache/apk/* \
     && curl -sS https://getcomposer.org/installer | php5 -- --install-dir=/usr/local/bin --filename=composer \
     && mkdir /run/apache2 \
     && mkdir -p /opt/utils \
-    && ln -s /usr/bin/php5 /usr/bin/php
+    && ln -s /usr/bin/php5 /usr/bin/php && \
+    apk add -U tzdata && \ 
+    echo "America/La_Paz" > /etc/timezone
+
+ENV TZ=America/La_Paz
+
+RUN echo 'session.save_path = "/tmp"' > /etc/php5/conf.d/sessionsavepath.ini && \
+   echo 'date.timezone = "America/La_Paz"' > /etc/php5/conf.d/datetimezone.ini
 
 EXPOSE 80 443
 
