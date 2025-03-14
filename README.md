@@ -26,7 +26,7 @@ services:
 	    image: coderlrv/php:5.6-alpine
 	    ports:
 	       - 80:80
-	       - 443:443
+	       - 443:443	
 	    volumes:
 	      - ./:/app/
 ```
